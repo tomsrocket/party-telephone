@@ -1,5 +1,15 @@
 # Guestbook
 
+```bash
+# runterladen
+cd source
+rsync -h -v -r -P -t admin@zerofon.local:/home/admin/rotary-phone-audio-guestbook .
+
+# deployen
+cd source/rotary-phone-autio-guestbook
+rsync -h -v -r -P -t . admin@zerofon.local:/home/admin/rotary-phone-audio-guestbook 
+```
+
 ## Ansagesprüche Ideen
 
 Hey! Du hast den Hörer abgehoben – das bedeutet, du hast jetzt das Wort. Was willst du der Welt, der Zukunft oder einfach den nächsten Partygästen sagen? Teile einen Gedanken, einen Rat fürs Leben oder deinen Lieblingswitz. Deine Nachricht beginnt… jetzt
