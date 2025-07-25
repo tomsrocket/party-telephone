@@ -25,6 +25,7 @@ class CurrentEvent(Enum):
     NONE = 0
     HOOK = 1
     RECORD_GREETING = 2
+    PLAY_RANDOM_MESSAGE = 3
 
 
 class AudioGuestBook:
@@ -273,9 +274,10 @@ class AudioGuestBook:
 
     def pressed_play_random_message(self):
         
-        self.on_hook()
+        self.stop_recording_and_playback()
+        
         logger.info("Playing random message...")
-        self.current_event = CurrentEvent.HOOK  # Ensure playback can continue
+        self.current_event = CurrentEvent.PLAY_RANDOM_MESSAGE  # Ensure playback can continue
         # Start the greeting playback in a separate thread
         self.greeting_thread = threading.Thread(target=self.play_random_message)
         self.greeting_thread.start()
@@ -299,14 +301,15 @@ class AudioGuestBook:
 
                 if random_file:
                     # Play the audio file
-                    self.audio_interface.continue_playback = self.current_event == CurrentEvent.HOOK
-                    logger.info("Playing voicemail {random_file.name}...")
+                    self.audio_interface.continue_playback = self.current_event == CurrentEvent.PLAY_RANDOM_MESSAGE
+                    logger.info(f"Playing voicemail recordings/{random_file.name}...")
                     self.audio_interface.play_audio(
-                        self.config[random_file.name],
+                        f"recordings/{random_file.name}",
                         self.config["greeting_volume"],
                         self.config["greeting_start_delay"],
                     )
                     logger.info("Random message playback completed.")
+                    self.current_event = CurrentEvent.NONE
 
         except Exception as e:
             logger.error(f"Error playing random audio file: {str(e)}")
